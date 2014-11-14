@@ -1,0 +1,108 @@
+var squaresjs = function(width, height, cellWidth)
+	{
+		that = this;
+		this.canvas = document.getElementById("canvas");
+		this.ctx = this.canvas.getContext("2d");
+
+		this.width = width;
+		this.height = height;
+		this.cellWidth = cellWidth;
+
+		that.rendering = 0;
+
+		this.drawSquare = function(sq)
+		{		
+		   	var steps = 50;
+		    var fadeR = (255 - sq.r) / steps;
+		    var fadeG = (255 - sq.g) / steps;
+		    var fadeB = (255 - sq.b) / steps;
+
+		    that.rendering++;
+
+		  	var i = 0;
+	        var interval = setInterval(function() 
+	        {
+	            that.ctx.fillStyle = 'rgb(' + Math.round(sq.r + fadeR * i) + ','
+	                                   + Math.round(sq.g + fadeG * i) + ','
+	                                   + Math.round(sq.b + fadeB * i) + ')';
+
+	            that.ctx.fillRect(sq.x * that.cellWidth, sq.y * that.cellWidth, that.cellWidth, that.cellWidth);
+
+	            i++;
+
+	            if(i === steps)
+	            {
+	                clearInterval(interval);
+
+	                that.rendering--;
+
+	                if(that.rendering === 0)
+	                {
+	                	that.clearCanvas();
+	                }
+	            }
+
+	        }, 30 );	
+		}
+
+		this.createSquares = function(n)
+		{	
+
+			var r, g, b;
+
+			for(var i = 0; i < n; i++)
+			{
+
+				var sq = 
+				{
+					x: Math.round(Math.random() * (that.width - that.cellWidth) / that.cellWidth), 
+					y: Math.round(Math.random()*(that.height - that.cellWidth) / that.cellWidth),
+					r:  Math.round(Math.random() * 255),
+					g: Math.round(Math.random() * 255),
+					b: Math.round(Math.random() * 255)
+				};
+
+				that.drawSquare(sq);
+			}
+		};
+
+		that.clearCanvas = function()
+		{
+			that.ctx.fillStyle = "white";
+			that.ctx.fillRect(0, 0, that.width, that.height);
+		}
+
+		this.draw = function()
+		{
+			that.clearCanvas();
+
+			function createSingleSquare(event)
+			{
+				var xPos = Math.round(event.pageX / 10) * 10;
+				var yPos = Math.round(event.pageY / 10) * 10;
+
+				var sq = 
+				{
+					x: Math.round(Math.random() * (that.width - that.cellWidth) / that.cellWidth), 
+					y: Math.round(Math.random() * (that.height - that.cellWidth) / that.cellWidth),
+					r:  Math.round(Math.random() * 255),
+					g: Math.round(Math.random() * 255),
+					b: Math.round(Math.random() * 255)
+				};
+
+				that.drawSquare(sq);				
+
+			}
+
+			that.canvas.addEventListener('mousemove', createSingleSquare, false);
+
+		};
+
+		if(typeof loop != "undefined") 
+		{
+			clearInterval(loop);
+		}
+
+		loop = setInterval(that.draw, 2500);
+
+	}
