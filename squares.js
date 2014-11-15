@@ -78,8 +78,18 @@ var squaresjs = function(width, height, cellWidth)
 
 			function createSingleSquare(event)
 			{
-				var xPos = Math.round(event.pageX / 10) * 10;
-				var yPos = Math.round(event.pageY / 10) * 10;
+				var xPos, yPos;
+
+				if(event.targetTouches != undefined)
+				{
+					xPos = Math.round(event.targetTouches[0].pageX / 10) * 10;
+					yPos = Math.round(event.targetTouches[0].pageY / 10) * 10;
+				}
+				else
+				{
+					xPos = Math.round(event.pageX / 10) * 10;
+					yPos = Math.round(event.pageY / 10) * 10;
+				}
 
 				var sq = 
 				{
@@ -95,6 +105,8 @@ var squaresjs = function(width, height, cellWidth)
 			}
 
 			that.canvas.addEventListener('mousemove', createSingleSquare, false);
+			that.canvas.addEventListener('touchstart', createSingleSquare, false);
+			that.canvas.addEventListener('touchmove', createSingleSquare, false);
 
 		};
 
