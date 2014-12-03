@@ -1,120 +1,102 @@
-var squaresjs = function(width, height, cellWidth)
-	{
-		that = this;
-		this.canvas = document.getElementById("canvas");
-		this.ctx = this.canvas.getContext("2d");
+var squaresjs = function(width, height, cellWidth) {
+    that = this;
+    this.canvas = document.getElementById("canvas");
+    this.ctx = this.canvas.getContext("2d");
 
-		this.width = width;
-		this.height = height;
-		this.cellWidth = cellWidth;
+    this.width = width;
+    this.height = height;
+    this.cellWidth = cellWidth;
 
-		that.rendering = 0;
+    that.rendering = 0;
 
-		this.drawSquare = function(sq)
-		{		
-		   	var steps = 50;
-		    var fadeR = (255 - sq.r) / steps;
-		    var fadeG = (255 - sq.g) / steps;
-		    var fadeB = (255 - sq.b) / steps;
+    this.drawSquare = function(sq) {
+        var steps = 50;
+        var fadeR = (255 - sq.r) / steps;
+        var fadeG = (255 - sq.g) / steps;
+        var fadeB = (255 - sq.b) / steps;
 
-		    that.rendering++;
+        that.rendering++;
 
-		  	var i = 0;
-	        var interval = setInterval(function() 
-	        {
-	            that.ctx.fillStyle = 'rgb(' + Math.round(sq.r + fadeR * i) + ','
-	                                   + Math.round(sq.g + fadeG * i) + ','
-	                                   + Math.round(sq.b + fadeB * i) + ')';
+        var i = 0;
+        var interval = setInterval(function() {
+            that.ctx.fillStyle = 'rgb(' + Math.round(sq.r + fadeR * i) + ',' + Math.round(sq.g + fadeG * i) + ',' + Math.round(sq.b + fadeB * i) + ')';
 
-	            that.ctx.fillRect(sq.x * that.cellWidth, sq.y * that.cellWidth, that.cellWidth, that.cellWidth);
+            that.ctx.fillRect(sq.x * that.cellWidth, sq.y * that.cellWidth, that.cellWidth, that.cellWidth);
 
-	            i++;
+            i++;
 
-	            if(i === steps)
-	            {
-	                clearInterval(interval);
+            if (i === steps) {
+                clearInterval(interval);
 
-	                that.rendering--;
+                that.rendering--;
 
-	                if(that.rendering === 0)
-	                {
-	                	that.clearCanvas();
-	                }
-	            }
+                if (that.rendering === 0) {
+                    that.clearCanvas();
+                }
+            }
 
-	        }, 30 );	
-		}
+        }, 30);
+    }
 
-		this.createSquares = function(n)
-		{	
+    this.createSquares = function(n) {
 
-			var r, g, b;
+        var r, g, b;
 
-			for(var i = 0; i < n; i++)
-			{
+        for (var i = 0; i < n; i++) {
 
-				var sq = 
-				{
-					x: Math.round(Math.random() * (that.width - that.cellWidth) / that.cellWidth), 
-					y: Math.round(Math.random()*(that.height - that.cellWidth) / that.cellWidth),
-					r:  Math.round(Math.random() * 255),
-					g: Math.round(Math.random() * 255),
-					b: Math.round(Math.random() * 255)
-				};
+            var sq = {
+                x: Math.round(Math.random() * (that.width - that.cellWidth) / that.cellWidth),
+                y: Math.round(Math.random() * (that.height - that.cellWidth) / that.cellWidth),
+                r: Math.round(Math.random() * 255),
+                g: Math.round(Math.random() * 255),
+                b: Math.round(Math.random() * 255)
+            };
 
-				that.drawSquare(sq);
-			}
-		};
+            that.drawSquare(sq);
+        }
+    };
 
-		that.clearCanvas = function()
-		{
-			that.ctx.fillStyle = "white";
-			that.ctx.fillRect(0, 0, that.width, that.height);
-		}
+    that.clearCanvas = function() {
+        that.ctx.fillStyle = "white";
+        that.ctx.fillRect(0, 0, that.width, that.height);
+    }
 
-		this.draw = function()
-		{
-			that.clearCanvas();
+    this.draw = function() {
+        that.clearCanvas();
 
-			function createSingleSquare(event)
-			{
-				var xPos, yPos;
+        function createSingleSquare(event) {
+            var xPos, yPos;
 
-				if(event.targetTouches != undefined)
-				{
-					xPos = Math.round(event.targetTouches[0].pageX / 10) * 10;
-					yPos = Math.round(event.targetTouches[0].pageY / 10) * 10;
-				}
-				else
-				{
-					xPos = Math.round(event.pageX / 10) * 10;
-					yPos = Math.round(event.pageY / 10) * 10;
-				}
+            if (event.targetTouches != undefined) {
+                xPos = Math.round(event.targetTouches[0].pageX / 10) * 10;
+                yPos = Math.round(event.targetTouches[0].pageY / 10) * 10;
+            } else {
+                xPos = Math.round(event.pageX / 10) * 10;
+                yPos = Math.round(event.pageY / 10) * 10;
+            }
 
-				var sq = 
-				{
-					x: Math.round(Math.random() * (that.width - that.cellWidth) / that.cellWidth), 
-					y: Math.round(Math.random() * (that.height - that.cellWidth) / that.cellWidth),
-					r:  Math.round(Math.random() * 255),
-					g: Math.round(Math.random() * 255),
-					b: Math.round(Math.random() * 255)
-				};
+            var sq = {
+                x: Math.round(Math.random() * (that.width - that.cellWidth) / that.cellWidth),
+                y: Math.round(Math.random() * (that.height - that.cellWidth) / that.cellWidth),
+                r: Math.round(Math.random() * 255),
+                g: Math.round(Math.random() * 255),
+                b: Math.round(Math.random() * 255)
+            };
 
-				that.drawSquare(sq);				
+            that.drawSquare(sq);
 
-			}
+        }
 
-			that.canvas.addEventListener('mousemove', createSingleSquare, false);
-			that.canvas.addEventListener('touchstart', createSingleSquare, false);
-			that.canvas.addEventListener('touchmove', createSingleSquare, false);
+        that.canvas.addEventListener('mousemove', createSingleSquare, false);
+        that.canvas.addEventListener('touchstart', createSingleSquare, false);
+        that.canvas.addEventListener('touchmove', createSingleSquare, false);
 
-		};
+    };
 
-		if(typeof loop != "undefined") 
-		{
-			clearInterval(loop);
-		}
+    if (typeof loop != "undefined") {
+        clearInterval(loop);
+    }
 
-		loop = setInterval(that.draw, 2500);
+    loop = setInterval(that.draw, 2500);
 
-	}
+}
